@@ -21,27 +21,21 @@ attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap
 // Create a base layer that holds both maps.
 let baseMaps = {
     "Streets": streets,
-    "Satellite Streets": satelliteStreets
+    "Satellite": satelliteStreets
 };
 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
-	center: [43.7, -79.3],
-	zoom: 11,
+	center: [39.5, -98.5],
+	zoom: 3,
 	layers: [streets]
 })
 
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
 
-// // Accessing the airport GeoJSON URL
-// let airportData = "https://raw.githubusercontent.com/kenwelsh/Mapping_Earthquakes/master/majorAirports.json";
-
-// // Accessing the Toronto airline routes GeoJSON URL.
-// let torontoData = "https://raw.githubusercontent.com/kenwelsh/Mapping_Earthquakes/master/torontoRoutes.json";
-
-// Accessing the Toronto neighborhoods GeoJSON URL.
-let torontoHoods = "https://raw.githubusercontent.com/kenwelsh/Mapping_Earthquakes/master/torontoNeighborhoods.json";
+// Accessing the USGS Past 7 Days Earthquake GeoJSON URL.
+let earthquakes = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // Create a style for the lines.
 let myStyle = {
@@ -52,41 +46,22 @@ let myStyle = {
 }
 
 // Grabbing our GeoJSON data.
-d3.json(torontoHoods).then(function(data) {
+d3.json(earthquakes).then(function(data) {
   console.log(data);
   // Creating a GeoJSON layer with the retrieved data.
-  L.geoJSON(data, {
-    style: myStyle,
-      // We turn each feature into a marker on the map.
-      onEachFeature: function(feature, layer) {
-        console.log(layer);
-        layer.bindPopup("<h3> Neighborhood: " + feature.properties.AREA_NAME + "</h3>");
-      }
-  })
-  .addTo(map);
+  L.geoJSON(data).addTo(map);
+    
+  //   , {
+  //   style: myStyle,
+  //     // We turn each feature into a marker on the map.
+  //     onEachFeature: function(feature, layer) {
+  //       console.log(layer);
+  //       //layer.bindPopup("<h3> Neighborhood: " + feature.properties.AREA_NAME + "</h3>");
+  //     }
+  // })
+  //.addTo(map);
 });
 
-
-// was between map and tileLayer
-// Add GeoJSON data.
-// let sanFranAirport =
-// {"type":"FeatureCollection","features":[{
-//     "type":"Feature",
-//     "properties":{
-//         "id":"3469",
-//         "name":"San Francisco International Airport",
-//         "city":"San Francisco",
-//         "country":"United States",
-//         "faa":"SFO",
-//         "icao":"KSFO",
-//         "alt":"13",
-//         "tz-offset":"-8",
-//         "dst":"A",
-//         "tz":"America/Los_Angeles"},
-//     "geometry":{
-//         "type":"Point",
-//         "coordinates":[-122.375,37.61899948120117]}}
-// ]};
 
 // Grabbing our GeoJSON data.
 // using onEachFeature function
